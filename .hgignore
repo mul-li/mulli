@@ -12,4 +12,4 @@ tmp/*
 dist/*
 build/*
 
-pycno.egg-info/*
+mulli.egg-info/*
