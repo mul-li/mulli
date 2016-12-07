@@ -1,0 +1,15 @@
+syntax: glob
+
+*.pyc
+__pycache__/*
+*~
+*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+
+tmp/*
+dist/*
+build/*
+
+pycno.egg-info/*
