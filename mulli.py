@@ -5,6 +5,7 @@ import itertools
 from datetime import date, timedelta, MAXYEAR
 from zlib import adler32
 
+from flask import current_app
 from werkzeug.routing import BaseConverter, ValidationError
 
 
@@ -27,23 +28,24 @@ def int_to_bytes(integer: int) -> bytes:
     return integer.to_bytes((integer.bit_length() // 8) + 1, 'little')
 
 
-def load_database(filename: str) -> dict:
+def load_database() -> dict:
     try:
-        with open(filename, mode='rb') as f:
+        with open(current_app.config['DATABASE'], mode='rb') as f:
             return pickle.load(f)
     except (EOFError, FileNotFoundError, pickle.UnpicklingError):
         return {}
 
 
-def save_database(database: dict, filename: str) -> None:
+def save_database(database: dict) -> None:
     try:
-        with open(filename, mode='wb') as f:
+        with open(current_app.config['DATABASE'], mode='wb') as f:
             pickle.dump(database, f)
     except Exception as e:
         raise RuntimeError from e
 
 
-def create_id(input: str, database: dict) -> int:
+def create_id(input: str) -> int:
+    database = load_database()
     h = adler32(input.encode('utf-8'))
     for _ in itertools.repeat(None, h):
         r = int_to_bytes(random.randint(1, h))
@@ -57,18 +59,21 @@ def is_expired(entry: dict) -> bool:
     return date.today() > entry['expire']
 
 
-def add_entry(id: int, entry: dict, valid: int, database: dict) -> dict:
+def add_entry(id: int, entry: dict, valid: int) -> dict:
     valid = int(valid)
     if valid == -1:
         expire = date(MAXYEAR, 12, 31)
     else:
         expire = date.today() + timedelta(valid)
     entry['expire'] = expire
+    database = load_database()
     database[id] = entry
+    save_database(database)
     return database
 
 
-def load_entry(id: int, database: dict) -> dict:
+def load_entry(id: int) -> dict:
+    database = load_database()
     try:
         entry = database[id]
     except KeyError:
