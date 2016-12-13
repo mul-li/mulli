@@ -82,3 +82,9 @@ def load_entry(id: int) -> dict:
         if is_expired(entry):
             raise ValueError
     return entry
+
+
+def remove_entry(id: int) -> None:
+    database = load_database()
+    del database[id]
+    save_database(database)
