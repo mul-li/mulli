@@ -7,6 +7,8 @@ from zlib import adler32
 
 from flask import current_app
 from werkzeug.routing import BaseConverter, ValidationError
+from celery import current_app as celery_app
+from celery import Task
 
 
 class HexConverter(BaseConverter):
@@ -22,6 +24,15 @@ class HexConverter(BaseConverter):
 
     def to_url(self, value: int) -> str:
         return hex(value)[2:]
+
+
+class AppContextTask(Task):
+
+    abstract = True
+
+    def __call__(self, *args, **kwargs):
+        with self.app.flask_app.app_context():
+            return super().__call__(self, *args, **kwargs)
 
 
 def int_to_bytes(integer: int) -> bytes:
@@ -84,7 +95,16 @@ def load_entry(id: int) -> dict:
     return entry
 
 
+@celery_app.task
 def remove_entry(id: int) -> None:
     database = load_database()
     del database[id]
     save_database(database)
+
+
+def make_celery(flask_app, celery_config):
+    celery_app.conf.update(celery_config)
+    celery_app.Task = AppContextTask
+
+    if not hasattr(celery_app, 'flask_app'):
+        celery_app.flask_app = flask_app
