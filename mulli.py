@@ -80,6 +80,7 @@ def add_entry(id: int, entry: dict, valid: int) -> dict:
     database = load_database()
     database[id] = entry
     save_database(database)
+    remove_entry.apply_async(args=[id], eta=expire)
     return database
 
 
