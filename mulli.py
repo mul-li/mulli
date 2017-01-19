@@ -32,7 +32,7 @@ class AppContextTask(Task):
 
     def __call__(self, *args, **kwargs):
         with self.app.flask_app.app_context():
-            return super().__call__(self, *args, **kwargs)
+            return super().__call__(*args, **kwargs)
 
 
 def int_to_bytes(integer: int) -> bytes:
@@ -76,11 +76,12 @@ def add_entry(id: int, entry: dict, valid: int) -> dict:
         expire = date(MAXYEAR, 12, 31)
     else:
         expire = date.today() + timedelta(valid)
+        submit_celery_task(id, expire)
+
     entry['expire'] = expire
     database = load_database()
     database[id] = entry
     save_database(database)
-    remove_entry.apply_async(args=[id], eta=expire)
     return database
 
 
@@ -96,7 +97,7 @@ def load_entry(id: int) -> dict:
     return entry
 
 
-@celery_app.task
+@celery_app.task(ignore_result=True)
 def remove_entry(id: int) -> None:
     database = load_database()
     del database[id]
@@ -109,3 +110,8 @@ def make_celery(flask_app, celery_config):
 
     if not hasattr(celery_app, 'flask_app'):
         celery_app.flask_app = flask_app
+
+
+def submit_celery_task(id, expire):
+    countdown = (expire - date.today()).days * 86400
+    remove_entry.apply_async(args=[id], countdown=countdown)
