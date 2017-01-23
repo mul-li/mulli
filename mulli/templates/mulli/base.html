@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('mulli.static', filename='style.css') }}" />
+    {% block styles %}
+    {% endblock styles %}
+    <title>{{ title }} - {{ config['SITE_TITLE'] }}</title>
+  </head>
+  <body>
+    <div>
+      <header>
+        <a href="{{ url_for('root.index') }}"><h1>{{ config['SITE_TITLE'] }}</h1></a>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('root.index') }}">{{ INDEX_TITLE }}</a></li>
+          <li><a href="{{ url_for('root.about') }}">About</a></li>
+        </ul>
+      </nav>
+      <div class="content">
+        <div>
+          {% block content %}
+          {% endblock %}
+          {% if config['FOOTER_LINKS'] %}
+            {% if '.onion' in request.url_root %}
+              {% set onion = True %}
+            {% endif %}
+            <hr />
+            <footer>
+              {% for link in config['FOOTER_LINKS'] %}
+                <a href="{{ link['onion_address'] if onion else link['url'] }}">{{ link['text'] }}</a>
+              {% endfor %}
+            </footer>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

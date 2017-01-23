@@ -1,0 +1,10 @@
+{% extends "mulli/base.html" %}
+
+{% set title = "About" %}
+
+{% block content %}
+  {% if config['ONION_ADDRESS'] %}
+    <p><b>{{ config['SITE_TITLE'] }} Onion Address:</b> {{ config['ONION_ADDRESS'] }}</p>
+  {% endif %}
+  <p><b>{{ config['SITE_TITLE'] }} Version:</b> {{ APP_VERSION }}</p>
+{% endblock %}

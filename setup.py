@@ -1,9 +1,10 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='mulli',
-    version='0.0.5',
-    py_modules=['mulli'],
+    version='0.0.6-dev',
+    packages=find_packages(),
+    include_package_data=True,
     install_requires={
         'Flask==0.11.1',
         'werkzeug==0.11.11',

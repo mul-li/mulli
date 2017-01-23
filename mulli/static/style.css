@@ -1,0 +1,183 @@
+@font-face {
+	font-family: 'Exo 2';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Exo 2'), url(/static/mulli/fonts/Exo2-Regular.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'Exo 2';
+	font-style: italic;
+	font-weight: normal;
+	src: local('Exo 2'), url(/static/mulli/fonts/Exo2-Italic.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'Exo 2';
+	font-style: normal;
+	font-weight: bold;
+	src: local('Exo 2'), url(/static/mulli/fonts/Exo2-Bold.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'Exo 2';
+	font-style: italic;
+	font-weight: bold;
+	src: local('Exo 2'), url(/static/mulli/fonts/Exo2-Italic-Bold.woff) format('woff');
+}
+
+@media screen and (max-width: 35.5em) {
+    .content > div {
+        width: 91.6667%;
+    }
+}
+
+@media screen and (min-width: 35.5em) {
+    .content > div {
+        width: 66.6667%;
+    }
+}
+
+@media screen and (min-width: 48em) {
+    .content > div {
+        width: 58.3333%;
+    }
+}
+
+@media screen and (min-width: 80em) {
+    .content > div {
+        width: 33.3333%
+    }
+}
+
+body, .content, nav, form, nav > ul, footer {
+    display: flex;
+}
+
+body, form {
+    flex-direction: column;
+}
+
+body {
+    height: 100vh;
+    text-align: center;
+}
+
+body, nav > ul {
+    margin: 0;
+}
+
+body > div {
+    min-height: 50vh;
+}
+
+input, select, body {
+    font-family: 'Exo 2', sans-serif;
+}
+
+body, .content, nav {
+    justify-content: center;
+}
+
+form {
+    align-items: flex-end;
+}
+
+.content > div {
+    max-width: 100%;
+}
+
+header {
+    font-size: 1.5em;
+}
+
+h1 {
+    margin-bottom: 0.25em;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+    color: #268bd2;
+}
+
+header > a:link,
+header > a:visited,
+header > a:hover,
+header > a:active {
+    color: black;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav > ul > li, input, select {
+    font-size: 1.2em;
+}
+
+nav > ul > li > a, input[type=submit] {
+    padding: .5em 1em;
+}
+
+nav > ul > li > a {
+    display: block;
+}
+
+input, select {
+    margin: 0.25em 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+select {
+    height: 2.25em;
+    background-color: #fff;
+    padding: .5em .6em;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+}
+
+input:required:focus,
+select:required:focus {
+    outline: 0;
+    border-color: #dc322f;
+}
+
+select:hover {
+    border-color: #268bd2;
+}
+
+input[type=submit] {
+    border: 0;
+    border-radius: 2px;
+    background-color: #268bd2;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-image: linear-gradient(transparent, rgba(0,0,0,.05), 40%, rgba(0,0,0,.1));
+}
+
+
+hr {
+    margin-top: 2.5vh;
+    margin-bottom: 0;
+}
+
+footer {
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+footer > a {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+}

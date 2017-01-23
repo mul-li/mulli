@@ -5,10 +5,48 @@ import itertools
 from datetime import date, timedelta, MAXYEAR
 from zlib import adler32
 
-from flask import current_app
+from flask import current_app, Blueprint
+
 from werkzeug.routing import BaseConverter, ValidationError
+
 from celery import current_app as celery_app
 from celery import Task
+
+
+class Mulli:
+
+    def __init__(self, app=None, hex_converter=False):
+
+        self.hex_converter = hex_converter
+
+        if app is not None:
+            self.init_app(app)
+
+    def init_app(self, app, *, celery_config=None):
+        blueprint = Blueprint(
+            'mulli',
+            __name__,
+            template_folder='templates',
+            static_folder='static',
+            static_url_path=app.static_url_path + '/mulli',
+        )
+        app.register_blueprint(blueprint)
+
+        if self.hex_converter:
+            app.url_map.converters['hex'] = HexConverter
+
+
+class Celery:
+
+    def __init__(self, app=None, celery_config=None):
+        if app is not None:
+            self.init_app(app, celery_config)
+
+    def init_app(self, app, celery_config):
+        celery_app.conf.update(celery_config)
+        celery_app.Task = AppContextTask
+        if not hasattr(celery_app, 'flask_app'):
+            celery_app.flask_app = app
 
 
 class HexConverter(BaseConverter):
@@ -102,14 +140,6 @@ def remove_entry(id: int) -> None:
     database = load_database()
     del database[id]
     save_database(database)
-
-
-def make_celery(flask_app, celery_config):
-    celery_app.conf.update(celery_config)
-    celery_app.Task = AppContextTask
-
-    if not hasattr(celery_app, 'flask_app'):
-        celery_app.flask_app = flask_app
 
 
 def submit_celery_task(id, expire):
