@@ -7,8 +7,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires={
-        'Flask==0.11.1',
-        'werkzeug==0.11.11',
+        'Flask==0.12.2',
         'Celery==4.0.2',
     }
 )
