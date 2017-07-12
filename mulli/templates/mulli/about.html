@@ -3,8 +3,9 @@
 {% set title = "About" %}
 
 {% block content %}
-  {% if config['ONION_ADDRESS'] %}
-    <p><b>{{ config['SITE_TITLE'] }} Onion Address:</b> {{ config['ONION_ADDRESS'] }}</p>
+  {% set onion_address = config['ONION_ADDRESS'] %}
+  {% if onion_address %}
+    <p><b>{{ config['SITE_TITLE'] }} Onion Address:</b> <a href="http://{{ onion_address }}">{{ onion_address }}</a></p>
   {% endif %}
   <p><b>{{ config['SITE_TITLE'] }} Version:</b> {{ APP_VERSION }}</p>
 {% endblock %}
