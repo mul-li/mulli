@@ -22,7 +22,7 @@ class Mulli:
         if app is not None:
             self.init_app(app)
 
-    def init_app(self, app, *, celery_config=None):
+    def init_app(self, app):
         blueprint = Blueprint(
             'mulli',
             __name__,
