@@ -1,6 +1,6 @@
 import pickle
-import random
 import itertools
+import secrets
 
 from datetime import date, timedelta, MAXYEAR
 from zlib import adler32
@@ -97,8 +97,7 @@ def create_id(input: str) -> int:
     database = load_database()
     h = adler32(input.encode('utf-8'))
     for _ in itertools.repeat(None, h):
-        r = int_to_bytes(random.randint(1, h))
-        h = adler32(r, h)
+        h = adler32(secrets.token_bytes(), h)
         if h not in database:
             return h
     raise ValueError
